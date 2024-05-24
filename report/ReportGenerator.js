@@ -7,14 +7,30 @@ export default class ReportGenerator {
     }
     async generate(name) {
         this.report = new Report(name);
-        let testRailAPI = new TestRailAPI();
+        
         let tabConfigs = Config.report;
         for (const tabConfig of tabConfigs) {
-            let testCases = await testRailAPI.getTestCases(tabConfig.project_id, tabConfig.suite_id, tabConfig.filters);
             this.report.addTab(tabConfig.name);
-            let result = [["result"]]; //need to convert test-cases to result here
-            this.report.addResult(result);
+            this.report.addResult(await this.calculateResult(tabConfig));
         }
+    }
+    async calculateResult(tabConfig){
+        let result = [];
+        let testRailAPI = new TestRailAPI();
+        let testCases = await testRailAPI.getTestCases(tabConfig.project_id, tabConfig.suite_id, tabConfig.filters);
+        result.push(tabConfig.columns);
+        for (const testCase of testCases) {
+            let line = this.calculateLine(testCase, tabConfig.columns);
+            result.push(line);
+        }
+        return result;
+    }
+    calculateLine(testCase, columns){
+        let line = [];
+        for (const column of columns) {
+            line.push(testCase[column]);
+        }
+        return line;
     }
     saveToXLSX() {
         let reportWriterXLSX = new ReportWriterXLSX(this.report.name);

@@ -4,6 +4,7 @@
         "project_id": 2,
         "suite_id": 9,
         "filters": "&is_deleted=0&priority_id=3&priority_id=4",
-        "group_by": "custom_category"
+        "group_by": "custom_category",
+        "columns": ["custom_category", "id", "title"]
     }
 ]
