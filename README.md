@@ -32,3 +32,5 @@ Tab will be generated in XLSX report for every config.
 * suite_id - id of testrail suite
 * filters - every filter must start with "&" and define filtration value, e.g. "&is_deleted=0", you can apply many filters for the same field, e.g. "&priority_id=3,4" will include only test-cases with 3 and 4 priorities
 * group_by - test-cases will be grouped by this field
+* show_groups - displaing or hiding group names in the report
+* sections_max_depth - displaying section name if its depth is less
