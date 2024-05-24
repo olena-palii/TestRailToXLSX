@@ -19,7 +19,7 @@ Get data from TestRail API and export to XLSX.
 
 ### testrail.json
 
-* baseURL - base url of TestRail in "https://238front.testrail.io" format
+* baseURL - base url of TestRail in "domain.testrail.io" format
 * login - login email for which apiKey was generated in TestRail
 * apiKey - apiKey generated in TestRail
 

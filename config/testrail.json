@@ -1,5 +1,5 @@
 {
-    "baseURL": "https://<name>.testrail.io",
+    "baseURL": "domain.testrail.io",
     "login": "login@email.com",
     "apiKey":"apiKey"
 }
