@@ -1,0 +1,17 @@
+{
+  "name": "testrailtoxlsx",
+  "version": "1.0.0",
+  "author": "Lenanetka",
+  "main": "Main.js",
+  "keywords": [
+    "testrail",
+    "xlsx",
+    "report"
+  ],
+  "license": "MIT",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}
