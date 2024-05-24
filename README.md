@@ -2,6 +2,10 @@
 
 Get data from TestRail API and export to XLSX.
 
+![1716591120761](image/README/1716591120761.png)
+
+![1716591137976](image/README/1716591137976.png)
+
 ## Project installation
 
 1. Install Node.js on PC
