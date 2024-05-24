@@ -15,7 +15,6 @@ export default class TestRailAPI {
     }
     async get(path) {
         var auth = 'Basic ' + Buffer.from(Config.testrail.login + ':' + Config.testrail.apiKey).toString('base64');
-        console.log('auth: ' + auth);
         var options = {
             hostname: Config.testrail.baseURL,
             port: 443,
