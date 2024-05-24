@@ -18,8 +18,14 @@ export default class ReportGenerator {
         let result = [];
         let testRailAPI = new TestRailAPI();
         let testCases = await testRailAPI.getTestCases(tabConfig.project_id, tabConfig.suite_id, tabConfig.filters);
+        testCases = testCases.sort((a, b) => a[tabConfig.group_by].localeCompare(b[tabConfig.group_by]));
+        let groupName;
         result.push(tabConfig.columns);
         for (const testCase of testCases) {
+            if(testCase[tabConfig.group_by] != groupName){
+                groupName = testCase[tabConfig.group_by];
+                result.push([null, groupName]);
+            }
             let line = this.calculateLine(testCase, tabConfig.columns);
             result.push(line);
         }
