@@ -8,6 +8,7 @@ export default class TestCaseReader {
         let sections = await this.testRailAPI.getSections(config.project_id, config.suite_id);
         testCases = this.groupTestCases(testCases, config.group_by);
         testCases = this.addSectionsInfoToTestCases(testCases, sections);
+        console.log(`${testCases.length} test-cases found for ${config.name} tab`);
         return testCases;
     }
     groupTestCases(testCases, group_by) {

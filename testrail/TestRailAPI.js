@@ -5,18 +5,26 @@ export default class TestRailAPI {
     }
     async getTestCases(project_id, suite_id, filters) {
         let path = `/index.php?/api/v2/get_cases/${project_id}&suite_id=${suite_id}${filters}`;
-        let data = await this.get(path);
-        return JSON.parse(data).cases;
+        return await this.getAllPages(path, 'cases');
     }
     async getSections(project_id, suite_id) {
         let path = `/index.php?/api/v2/get_sections/${project_id}&suite_id=${suite_id}`;
-        let data = await this.get(path);
-        return JSON.parse(data).sections;
+        return await this.getAllPages(path, 'sections');
     }
     async getSupportedFields() {
         let path = `/index.php?/api/v2/get_case_fields`;
-        let data = await this.get(path);
-        return JSON.parse(data);
+        return await this.getAllPages(path);
+    }
+    async getAllPages(path, subject) {
+        let entities = [];
+        let next = path;
+        while (next) {
+            let data = JSON.parse(await this.get(next));
+            next = data._links && data._links.next ? '/index.php?' + data._links.next : null;
+            if (subject) data = data[subject];
+            entities = [...entities, ...data];
+        }
+        return entities;
     }
     async get(path) {
         var auth = 'Basic ' + Buffer.from(Config.testrail.login + ':' + Config.testrail.apiKey).toString('base64');
