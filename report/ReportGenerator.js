@@ -1,4 +1,5 @@
 import Config from '../config/Config.js';
+import TestCaseReader from '../testrail/TestCaseReader.js';
 import TestRailAPI from '../testrail/TestRailAPI.js';
 import Report from './Report.js';
 import ReportWriterXLSX from './ReportWriterXLSX.js';
@@ -15,7 +16,8 @@ export default class ReportGenerator {
     }
     async generateResult(tabConfig) {
         let result = [];
-        let testCases = await this.getTestCases(tabConfig);
+        let testCaseReader = new TestCaseReader()
+        let testCases = await testCaseReader.read(tabConfig);
         let fields = await this.getSupportedFields();
         result.push(this.getColumnsNames(tabConfig.columns, fields));
         let groupCurrent;
@@ -42,25 +44,6 @@ export default class ReportGenerator {
             line.push(testCase[column]);
         }
         return line;
-    }
-    async getTestCases(tabConfig) {
-        let testRailAPI = new TestRailAPI();
-        let testCases = await testRailAPI.getTestCases(tabConfig.project_id, tabConfig.suite_id, tabConfig.filters);
-        let sections = await testRailAPI.getSections(tabConfig.project_id, tabConfig.suite_id);
-        testCases = this.groupTestCases(testCases, tabConfig.group_by);
-        testCases = this.addSectionsInfoToTestCases(testCases, sections);
-        return testCases;
-    }
-    groupTestCases(testCases, group_by) {
-        if (group_by)
-            testCases = testCases.sort((a, b) => a[group_by].toString().localeCompare(b[group_by]));
-        return testCases;
-    }
-    addSectionsInfoToTestCases(testCases, sections) {
-        for (let i = 0; i < testCases.length; i++) {
-            testCases[i].section = sections.find(x => x.id === testCases[i].section_id);
-        }
-        return testCases;
     }
     async getSupportedFields() {
         let testRailAPI = new TestRailAPI();
