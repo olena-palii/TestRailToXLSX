@@ -46,6 +46,7 @@ export default class NameReader {
         return columnNames;
     }
     async getValueLabel(column, value) {
+        if(column == 'id') return `=HYPERLINK("https://${Config.testrail.baseURL}/index.php?/cases/view/${value}","${value}")`;
         let fields = await this.getFields();
         let field = await fields.find(x => x.system_name === column);
         if (field && field.options) return field.options[value];
