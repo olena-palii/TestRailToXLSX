@@ -13,4 +13,7 @@ export default class Config {
     static get testrail() {
         return JSON.parse(FileReader.readFile('./config/testrail.json'));
     }
+    static get xlsx() {
+        return JSON.parse(FileReader.readFile('./config/xlsx.json'));
+    }
 }
