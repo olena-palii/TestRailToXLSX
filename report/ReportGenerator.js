@@ -33,15 +33,16 @@ export default class ReportGenerator {
                 let sectionLine = [null, sectionCurrent];
                 if (JSON.stringify(result[result.length - 1]) != JSON.stringify(sectionLine)) result.push(sectionLine);
             }
-            let line = this.generateLine(testCase, tabConfig.columns);
+            let line = await this.generateLine(testCase, tabConfig.columns);
             result.push(line);
         }
         return result;
     }
-    generateLine(testCase, columns) {
+    async generateLine(testCase, columns) {
         let line = [];
         for (const column of columns) {
-            line.push(testCase[column]);
+            let value = await this.nameReader.getValueLabel(column, testCase[column]);
+            line.push(value);
         }
         return line;
     }
