@@ -36,3 +36,7 @@ Tab will be generated in XLSX report for every config.
 * group_by - test-cases will be grouped by this field, set "group_by": false to skip it
 * show_groups - displaing or hiding group names in the report
 * sections_max_depth - displaying section name if its depth is less
+
+## Other
+
+If you copy the result to other document, please pay attention to locale of both XLSX files. Formulas separator, dates format and numbers format can be different for them. Set the same locale for both files to fix any issues.
