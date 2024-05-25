@@ -45,7 +45,7 @@ export default class ReportGenerator {
     async getTestCases(tabConfig) {
         let testRailAPI = new TestRailAPI();
         let testCases = await testRailAPI.getTestCases(tabConfig.project_id, tabConfig.suite_id, tabConfig.filters);
-        testCases = testCases.sort((a, b) => a[tabConfig.group_by].localeCompare(b[tabConfig.group_by]));
+        testCases = testCases.sort((a, b) => a[tabConfig.group_by].toString().localeCompare(b[tabConfig.group_by]));
         let sections = await testRailAPI.getSections(tabConfig.project_id, tabConfig.suite_id);
         testCases = this.addSectionsInfoToTestCases(testCases, sections);
         return testCases;
