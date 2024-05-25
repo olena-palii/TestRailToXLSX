@@ -16,7 +16,8 @@ export default class ReportGenerator {
     async generateResult(tabConfig) {
         let result = [];
         let testCases = await this.getTestCases(tabConfig);
-        result.push(tabConfig.columns);
+        let fields = await this.getSupportedFields();
+        result.push(this.getColumnsNames(tabConfig.columns, fields));
         let groupCurrent;
         let sectionCurrent;
         for (const testCase of testCases) {
@@ -60,6 +61,20 @@ export default class ReportGenerator {
             testCases[i].section = sections.find(x => x.id === testCases[i].section_id);
         }
         return testCases;
+    }
+    async getSupportedFields() {
+        let testRailAPI = new TestRailAPI();
+        let fields = await testRailAPI.getSupportedFields();
+        return fields;
+    }
+    getColumnsNames(columns, fields) {
+        let columnsNames = [];
+        for (const column of columns) {
+            let field = fields.find(x => x.system_name === column);
+            let columnName = field ? field.label : column[0].toUpperCase() + column.substring(1);
+            columnsNames.push(columnName);
+        }
+        return columnsNames;
     }
     saveToXLSX() {
         let reportWriterXLSX = new ReportWriterXLSX(this.report.name);

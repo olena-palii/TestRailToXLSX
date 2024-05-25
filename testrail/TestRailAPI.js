@@ -13,6 +13,11 @@ export default class TestRailAPI {
         let data = await this.get(path);
         return JSON.parse(data).sections;
     }
+    async getSupportedFields() {
+        let path = `/index.php?/api/v2/get_case_fields`;
+        let data = await this.get(path);
+        return JSON.parse(data);
+    }
     async get(path) {
         var auth = 'Basic ' + Buffer.from(Config.testrail.login + ':' + Config.testrail.apiKey).toString('base64');
         var options = {
@@ -39,5 +44,5 @@ export default class TestRailAPI {
             });
             req.end();
         });
-    };
+    }
 }
