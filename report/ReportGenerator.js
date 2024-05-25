@@ -17,17 +17,17 @@ export default class ReportGenerator {
         let result = [];
         let testCases = await this.getTestCases(tabConfig);
         result.push(tabConfig.columns);
-        let groupName;
-        let sectionName;
+        let groupCurrent;
+        let sectionCurrent;
         for (const testCase of testCases) {
-            if (tabConfig.show_groups && testCase[tabConfig.group_by] != groupName) {
-                groupName = testCase[tabConfig.group_by];
-                let groupLine = [null, groupName];
+            if (tabConfig.show_groups && testCase[tabConfig.group_by] != groupCurrent) {
+                groupCurrent = testCase[tabConfig.group_by];
+                let groupLine = [null, groupCurrent];
                 result.push(groupLine);
             }
-            if (testCase.section.depth < tabConfig.sections_max_depth && testCase.section.name != sectionName) {
-                sectionName = testCase.section.name;
-                let sectionLine = [null, sectionName];
+            if (testCase.section.depth < tabConfig.sections_max_depth && testCase.section.name != sectionCurrent) {
+                sectionCurrent = testCase.section.name;
+                let sectionLine = [null, sectionCurrent];
                 if (JSON.stringify(result[result.length - 1]) != JSON.stringify(sectionLine)) result.push(sectionLine);
             }
             let line = this.generateLine(testCase, tabConfig.columns);
@@ -45,10 +45,14 @@ export default class ReportGenerator {
     async getTestCases(tabConfig) {
         let testRailAPI = new TestRailAPI();
         let testCases = await testRailAPI.getTestCases(tabConfig.project_id, tabConfig.suite_id, tabConfig.filters);
-        if (tabConfig.group_by)
-            testCases = testCases.sort((a, b) => a[tabConfig.group_by].toString().localeCompare(b[tabConfig.group_by]));
         let sections = await testRailAPI.getSections(tabConfig.project_id, tabConfig.suite_id);
+        testCases = this.groupTestCases(testCases, tabConfig.group_by);
         testCases = this.addSectionsInfoToTestCases(testCases, sections);
+        return testCases;
+    }
+    groupTestCases(testCases, group_by) {
+        if (group_by)
+            testCases = testCases.sort((a, b) => a[group_by].toString().localeCompare(b[group_by]));
         return testCases;
     }
     addSectionsInfoToTestCases(testCases, sections) {
