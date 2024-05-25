@@ -1,10 +1,12 @@
 import Config from '../config/Config.js';
 import TestCaseReader from '../testrail/TestCaseReader.js';
-import TestRailAPI from '../testrail/TestRailAPI.js';
+import NameReader from '../testrail/NameReader.js';
 import Report from './Report.js';
 import ReportWriterXLSX from './ReportWriterXLSX.js';
 export default class ReportGenerator {
     constructor() {
+        this.testCaseReader = new TestCaseReader();
+        this.nameReader = new NameReader();
     }
     async generate(name) {
         this.report = new Report(name);
@@ -16,10 +18,8 @@ export default class ReportGenerator {
     }
     async generateResult(tabConfig) {
         let result = [];
-        let testCaseReader = new TestCaseReader()
-        let testCases = await testCaseReader.read(tabConfig);
-        let fields = await this.getSupportedFields();
-        result.push(this.getColumnsNames(tabConfig.columns, fields));
+        let testCases = await this.testCaseReader.read(tabConfig);
+        result.push(await this.nameReader.getColumnNames(tabConfig.columns));
         let groupCurrent;
         let sectionCurrent;
         for (const testCase of testCases) {
@@ -44,20 +44,6 @@ export default class ReportGenerator {
             line.push(testCase[column]);
         }
         return line;
-    }
-    async getSupportedFields() {
-        let testRailAPI = new TestRailAPI();
-        let fields = await testRailAPI.getSupportedFields();
-        return fields;
-    }
-    getColumnsNames(columns, fields) {
-        let columnsNames = [];
-        for (const column of columns) {
-            let field = fields.find(x => x.system_name === column);
-            let columnName = field ? field.label : column[0].toUpperCase() + column.substring(1);
-            columnsNames.push(columnName);
-        }
-        return columnsNames;
     }
     saveToXLSX() {
         let reportWriterXLSX = new ReportWriterXLSX(this.report.name);

@@ -1,11 +1,11 @@
 import TestRailAPI from './TestRailAPI.js';
 export default class TestCaseReader {
     constructor() {
+        this.testRailAPI = new TestRailAPI();
     }
     async read(config) {
-        let testRailAPI = new TestRailAPI();
-        let testCases = await testRailAPI.getTestCases(config.project_id, config.suite_id, config.filters);
-        let sections = await testRailAPI.getSections(config.project_id, config.suite_id);
+        let testCases = await this.testRailAPI.getTestCases(config.project_id, config.suite_id, config.filters);
+        let sections = await this.testRailAPI.getSections(config.project_id, config.suite_id);
         testCases = this.groupTestCases(testCases, config.group_by);
         testCases = this.addSectionsInfoToTestCases(testCases, sections);
         return testCases;
