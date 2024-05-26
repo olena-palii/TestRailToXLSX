@@ -1,6 +1,5 @@
 import TestRailAPI from './TestRailAPI.js';
-import Config from '../config/Config.js';
-export default class NameReader {
+export default class FieldReader {
     constructor() {
         this.testRailAPI = new TestRailAPI();
     }
@@ -34,24 +33,5 @@ export default class NameReader {
             fieldOptions[itemKey] = itemValue;
         }
         return fieldOptions;
-    }
-    async getColumnNames(columns) {
-        let columnNames = [];
-        for (const column of columns) {
-            let fields = await this.getFields();
-            let field = await fields.find(x => x.system_name === column);
-            let columnName = field ? field.label : column[0].toUpperCase() + column.substring(1);
-            let cell = { v: columnName, s: Config.xlsx.heading_style };
-            columnNames.push(cell);
-        }
-        return columnNames;
-    }
-    async getValueLabel(column, value) {
-        let cell = { v: value };
-        if(column == 'id') cell.l = { Target: `https://${Config.testrail.baseURL}/index.php?/cases/view/${value}` };
-        let fields = await this.getFields();
-        let field = await fields.find(x => x.system_name === column);
-        if (field && field.options) cell.v = field.options[value];
-        return cell;
     }
 }
