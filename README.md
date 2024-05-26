@@ -2,7 +2,7 @@
 
 Get data from TestRail API and export to XLSX.
 
-![1716649097457](image/README/1716649097457.png)
+![1716766821511](image/README/1716766821511.png)
 
 ## Project installation
 
@@ -36,6 +36,31 @@ Tab will be generated in XLSX report for every config.
 * group_by - test-cases will be grouped by this field, set "group_by": false to skip it
 * show_groups - displaing or hiding group names in the report
 * sections_max_depth - displaying section name if its depth is less
+
+### xlsx.json
+
+For adjustment of column width to its content:
+
+* min_width is min column width
+* max_width is max column width
+* character_width is approximate width of 1 character that is used for calculation
+
+Styles for heading, groups and sections cells:
+
+* heading_style
+* group_style
+* section_style
+
+There is ability to add custom colors for the columns with options. For example, for "custom_status" with "Draft", "Actual", "Need update", "Outdated" options you can set colors in the next way:
+
+```
+"custom_status":{
+        "Draft": "fbbc04",
+        "Actual": "34a853",
+        "Need update": "4285f4",
+        "Outdated": "cccccc"
+    }
+```
 
 ## Other
 

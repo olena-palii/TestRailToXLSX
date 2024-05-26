@@ -17,5 +17,18 @@
         "font": {
             "bold": true
         }
+    },
+    "custom_automation_status":{
+        "Not automated": "fbbc04",
+        "Automated": "34a853",
+        "Need update": "4285f4",
+        "Manual only": "cccccc",
+        "Not supported": "cccccc"
+    },
+    "custom_status":{
+        "Draft": "fbbc04",
+        "Actual": "34a853",
+        "Need update": "4285f4",
+        "Outdated": "cccccc"
     }
 }

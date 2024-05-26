@@ -27,10 +27,13 @@ export default class NameReader {
     }
     async getCellWithLabel(column, value) {
         let cell = { v: value };
-        if(column == 'id') cell.l = { Target: `https://${Config.testrail.baseURL}/index.php?/cases/view/${value}` };
+        if (column == 'id') cell.l = { Target: `https://${Config.testrail.baseURL}/index.php?/cases/view/${value}` };
         let fields = await this.fieldReader.getFields();
         let field = await fields.find(x => x.system_name === column);
-        if (field && field.options) cell.v = field.options[value];
+        if (field && field.options) {
+            cell.v = field.options[value];
+            if (Config.xlsx[column]) cell.s = { fill: { fgColor: { rgb: Config.xlsx[column][cell.v] } } }
+        }
         return cell;
     }
 }
