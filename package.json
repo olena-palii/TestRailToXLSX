@@ -12,6 +12,6 @@
   "description": "",
   "type": "module",
   "dependencies": {
-    "xlsx": "^0.18.5"
+    "xlsx-js-style": "^1.2.0"
   }
 }
