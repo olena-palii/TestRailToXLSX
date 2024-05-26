@@ -30,7 +30,7 @@ export default class ReportGenerator {
             }
             if (testCase.section.depth < tabConfig.sections_max_depth && testCase.section.name != sectionCurrent) {
                 sectionCurrent = testCase.section.name;
-                let sectionLine = [null, sectionCurrent];
+                let sectionLine = [null, Config.xlsx.section_symbol + sectionCurrent];
                 if (JSON.stringify(result[result.length - 1]) != JSON.stringify(sectionLine)) result.push(sectionLine);
             }
             let line = await this.generateLine(testCase, tabConfig.columns);

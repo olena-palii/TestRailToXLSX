@@ -7,11 +7,17 @@
     "group_symbol": "#",
     "group_style": {
         "font": {
-            "sz": 12,
+            "sz": 14,
             "bold": true
         }
     },
     "heading_style": {
+        "font": {
+            "bold": true
+        }
+    },
+    "section_symbol": "*",
+    "section_style": {
         "font": {
             "bold": true
         }

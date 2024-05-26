@@ -43,6 +43,10 @@ export default class ReportWriterXLSX {
                     cell.v = cell.v.substring(1);
                     cell.s = Config.xlsx.group_style;
                 }
+                if (cell && cell.v && cell.v[0] == Config.xlsx.section_symbol) {
+                    cell.v = cell.v.substring(1);
+                    cell.s = Config.xlsx.section_style;
+                }
             }
         }
         return worksheet;
