@@ -25,13 +25,15 @@ export default class ReportGenerator {
         for (const testCase of testCases) {
             if (tabConfig.show_groups && testCase[tabConfig.group_by] != groupCurrent) {
                 groupCurrent = testCase[tabConfig.group_by];
-                let groupLine = [null, Config.xlsx.group_symbol + groupCurrent];
+                let cell = { v: groupCurrent, s: Config.xlsx.group_style };
+                let groupLine = [null, cell];
                 result.push(groupLine);
             }
             if (testCase.section.depth < tabConfig.sections_max_depth && testCase.section.name != sectionCurrent) {
                 sectionCurrent = testCase.section.name;
-                let sectionLine = [null, Config.xlsx.section_symbol + sectionCurrent];
-                if (JSON.stringify(result[result.length - 1]) != JSON.stringify(sectionLine)) result.push(sectionLine);
+                let cell = { v: sectionCurrent, s: Config.xlsx.section_style };
+                let sectionLine = [null, cell];
+                result.push(sectionLine);
             }
             let line = await this.generateLine(testCase, tabConfig.columns);
             result.push(line);
@@ -41,8 +43,8 @@ export default class ReportGenerator {
     async generateLine(testCase, columns) {
         let line = [];
         for (const column of columns) {
-            let value = await this.nameReader.getValueLabel(column, testCase[column]);
-            line.push(value);
+            let cell = await this.nameReader.getValueLabel(column, testCase[column]);
+            line.push(cell);
         }
         return line;
     }

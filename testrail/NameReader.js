@@ -41,15 +41,17 @@ export default class NameReader {
             let fields = await this.getFields();
             let field = await fields.find(x => x.system_name === column);
             let columnName = field ? field.label : column[0].toUpperCase() + column.substring(1);
-            columnNames.push(columnName);
+            let cell = { v: columnName, s: Config.xlsx.heading_style };
+            columnNames.push(cell);
         }
         return columnNames;
     }
     async getValueLabel(column, value) {
-        if(column == 'id') return `@https://${Config.testrail.baseURL}/index.php?/cases/view/${value}@${value}`;
+        let cell = { v: value };
+        if(column == 'id') cell.l = { Target: `https://${Config.testrail.baseURL}/index.php?/cases/view/${value}` };
         let fields = await this.getFields();
         let field = await fields.find(x => x.system_name === column);
-        if (field && field.options) return field.options[value];
-        return value;
+        if (field && field.options) cell.v = field.options[value];
+        return cell;
     }
 }
