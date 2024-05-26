@@ -25,7 +25,7 @@ export default class ReportGenerator {
         for (const testCase of testCases) {
             if (tabConfig.show_groups && testCase[tabConfig.group_by] != groupCurrent) {
                 groupCurrent = testCase[tabConfig.group_by];
-                let groupLine = [null, groupCurrent];
+                let groupLine = [null, Config.xlsx.group_symbol + groupCurrent];
                 result.push(groupLine);
             }
             if (testCase.section.depth < tabConfig.sections_max_depth && testCase.section.name != sectionCurrent) {

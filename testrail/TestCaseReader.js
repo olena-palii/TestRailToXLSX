@@ -14,7 +14,7 @@ export default class TestCaseReader {
     groupTestCases(testCases, group_by) {
         if (group_by)
             testCases = testCases.sort(
-                (a, b) => a[group_by].toString().localeCompare(b[group_by])
+                (a, b) => { if (a[group_by]) a[group_by].toString().localeCompare(b[group_by]) }
             );
         return testCases;
     }

@@ -1,4 +1,4 @@
-import XLSX from 'xlsx';
+import XLSX from 'xlsx-js-style';
 import Config from '../config/Config.js';
 import DateNow from '../config/DateNow.js';
 import FileReader from '../file/FileReader.js';
@@ -12,23 +12,36 @@ export default class ReportWriterXLSX {
         if (FileReader.fileExists(this.file)) workbook = XLSX.readFile(this.file);
         else workbook = XLSX.utils.book_new();
         var worksheet = XLSX.utils.aoa_to_sheet(result);
-        worksheet = this.applyFormulas(worksheet);
+        worksheet = this.applyFormats(worksheet);
         worksheet = this.adjustColumnWidth(worksheet);
         if (workbook.SheetNames.includes(tabName)) workbook.Sheets[tabName] = worksheet;
         else XLSX.utils.book_append_sheet(workbook, worksheet, tabName);
         XLSX.writeFile(workbook, this.file);
     }
-    applyFormulas(worksheet) {
+    applyFormats(worksheet) {
         const range = XLSX.utils.decode_range(worksheet['!ref']);
         for (let row = range.s.r; row <= range.e.r; ++row) {
             for (let column = range.s.c; column <= range.e.c; ++column) {
                 const cell_address = { c: column, r: row };
                 const cell_ref = XLSX.utils.encode_cell(cell_address);
                 const cell = worksheet[cell_ref];
-                if (cell && cell.v[0] == '=') {
-                    cell.t = "n";
+                if(cell && row == 0){
+                    cell.s = Config.xlsx.heading_style;
+                }
+                if (cell && cell.v && cell.v[0] == Config.xlsx.formula_symbol) {
                     cell.f = cell.v.substring(1);
                     cell.v = null;
+                }
+                if (cell && cell.v && cell.v[0] == Config.xlsx.link_symbol) {
+                    let linkSplit = cell.v.substring(1).split(Config.xlsx.link_symbol);
+                    let link = linkSplit[0];
+                    let linkName = linkSplit[1];
+                    cell.l = { Target: link };
+                    cell.v = linkName;
+                }
+                if (cell && cell.v && cell.v[0] == Config.xlsx.group_symbol) {
+                    cell.v = cell.v.substring(1);
+                    cell.s = Config.xlsx.group_style;
                 }
             }
         }

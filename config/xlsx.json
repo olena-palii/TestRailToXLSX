@@ -1,5 +1,19 @@
 {
     "min_width": 60,
     "max_width": 400,
-    "character_width": 7
+    "character_width": 7,
+    "formula_symbol": "=",
+    "link_symbol": "@",
+    "group_symbol": "#",
+    "group_style": {
+        "font": {
+            "sz": 12,
+            "bold": true
+        }
+    },
+    "heading_style": {
+        "font": {
+            "bold": true
+        }
+    }
 }
