@@ -5,7 +5,7 @@
     "columnName": "Report status",
     "skipped_status": "Skipped",
     "default": {
-        "postfix": "Default",
+        "postfix": "",
         "rules": {
             "Automated": [
                 {

@@ -6,6 +6,7 @@
         "suite_id": 9,
         "filters": "&is_deleted=0&priority_id=3,4",
         "group_by": "custom_category",
-        "show_groups": true
+        "show_groups": true,
+        "statistics": "default"
     }
 ]
