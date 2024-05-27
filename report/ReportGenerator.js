@@ -20,6 +20,10 @@ export default class ReportGenerator {
         if (Config.statistics.enabled) {
             this.report.addTab(Config.statistics.tabName);
             this.report.addResult(this.statisticsGenerator.statistics);
+            for (const groupStatistics of this.statisticsGenerator.groupStatistics) {
+                this.report.addTab(groupStatistics.name);
+                this.report.addResult(groupStatistics.statistics);
+            }
         }
     }
     async generateResult(tabConfig) {
@@ -28,11 +32,13 @@ export default class ReportGenerator {
         if (Config.statistics.enabled) await this.statisticsGenerator.addTabStatistics(testCases, tabConfig.name);
         let columns = Config.statistics.enabled ? [...tabConfig.columns, Config.statistics.column] : tabConfig.columns;
         result.push(await this.cellGenerator.getHeadingLine(columns));
+        let groups = [];
         let groupCurrent;
         let sectionCurrent;
         for (const testCase of testCases) {
             if (tabConfig.show_groups && testCase[tabConfig.group_by] != groupCurrent) {
                 groupCurrent = testCase[tabConfig.group_by];
+                groups.push(groupCurrent);
                 result.push(this.cellGenerator.getGroupLine(groupCurrent));
             }
             if (testCase.section.depth < tabConfig.sections_max_depth && testCase.section.name != sectionCurrent) {
@@ -42,6 +48,7 @@ export default class ReportGenerator {
             let line = await this.generateLine(testCase, columns);
             result.push(line);
         }
+        if (Config.statistics.enabled) await this.statisticsGenerator.addGroupStatistics(testCases, groups, tabConfig);
         return result;
     }
     async generateLine(testCase, columns) {
