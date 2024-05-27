@@ -9,16 +9,20 @@ export default class TestCaseReader {
         let testCases = await this.testRailAPI.getTestCases(config.project_id, config.suite_id, config.filters);
         let sections = await this.testRailAPI.getSections(config.project_id, config.suite_id);
         let fields = await this.fieldReader.getFields();
-        testCases = this.groupTestCases(testCases, config.group_by);
         testCases = this.addSectionsInfoToTestCases(testCases, sections);
         testCases = await this.setValuesToLabelsInTestCases(testCases, fields);
+        testCases = this.groupTestCases(testCases, config.group_by);
         console.log(`${testCases.length} test-cases found for ${config.name} tab`);
         return testCases;
     }
     groupTestCases(testCases, group_by) {
         if (group_by)
             testCases = testCases.sort(
-                (a, b) => { if (a[group_by]) a[group_by].toString().localeCompare(b[group_by]) }
+                (a, b) => {
+                    const aValue = a[group_by] || "";
+                    const bValue = b[group_by] || "";
+                    return aValue.toString().localeCompare(bValue.toString());
+                }
             );
         return testCases;
     }
