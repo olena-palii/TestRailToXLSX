@@ -4,6 +4,8 @@ Get data from TestRail API and export to XLSX.
 
 ![1716766821511](image/README/1716766821511.png)
 
+![1716814324626](image/README/1716814324626.png)
+
 ## Project installation
 
 1. Install Node.js on PC
@@ -59,6 +61,46 @@ There is ability to add custom colors for the columns with options. For example,
         "Actual": "34a853",
         "Need update": "4285f4",
         "Outdated": "cccccc"
+    }
+```
+
+
+
+### statistics.json
+
+- enabled - enable or disable statistics calculation
+- tabName - name of the tab with statistics
+- column - test case property that will be created for statistics
+- columnName - name of additional column in every tab
+- skipped_status - default value if no rule is applied
+- rules is how test cases are grouped for calculating statistics
+
+Example of statistics rules: statistics will be calculated for "Automated", "Can be automated" and "Not ready for automation" statuses. For "Automated" status only test-cases with "custom_automation_status": "Automated" and "custom_status": "Actual" are counted.
+
+```
+"rules": {
+        "Automated": [
+            {
+                "custom_automation_status": "Automated",
+                "custom_status": "Actual"
+            }
+        ],
+        "Can be automated": [
+            {
+                "custom_automation_status": "Not automated",
+                "custom_status": "Actual"
+            }
+        ],
+        "Not ready for automation": [
+            {
+                "custom_automation_status": "Not automated",
+                "custom_status": "Draft"
+            },
+            {
+                "custom_automation_status": "Not automated",
+                "custom_status": "Need update"
+            }
+        ]
     }
 ```
 

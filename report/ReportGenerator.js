@@ -17,14 +17,16 @@ export default class ReportGenerator {
             this.report.addTab(tabConfig.name);
             this.report.addResult(await this.generateResult(tabConfig));
         }
-        this.report.addTab(Config.statistics.tabName);
-        this.report.addResult(this.statisticsGenerator.statistics);
+        if (Config.statistics.enabled) {
+            this.report.addTab(Config.statistics.tabName);
+            this.report.addResult(this.statisticsGenerator.statistics);
+        }
     }
     async generateResult(tabConfig) {
         let result = [];
         let testCases = await this.testCaseReader.read(tabConfig);
-        await this.statisticsGenerator.addTabStatistics(testCases, tabConfig.name);
-        let columns = tabConfig.statistics ? [...tabConfig.columns, Config.statistics.column] : tabConfig.columns;
+        if (Config.statistics.enabled) await this.statisticsGenerator.addTabStatistics(testCases, tabConfig.name);
+        let columns = Config.statistics.enabled ? [...tabConfig.columns, Config.statistics.column] : tabConfig.columns;
         result.push(await this.cellGenerator.getHeadingLine(columns));
         let groupCurrent;
         let sectionCurrent;

@@ -34,6 +34,7 @@ export default class StatisticsGenerator {
                 if (testCase[Config.statistics.column] == this.statuses()[i])
                     this.statistics[i + 1][column].v += 1;
             }
+        console.log(`Added statistics for for ${tabName} tab`);
         return this.statistics;
     }
 }
