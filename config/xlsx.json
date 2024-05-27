@@ -18,6 +18,13 @@
             "bold": true
         }
     },
+    "statistics_status":{
+        "Automated": "34a853",
+        "Need update": "fbbc04",
+        "Need delete": "666666",
+        "Can be automated": "b7b7b7",
+        "Not ready for automation": "efefef"
+    },
     "custom_automation_status":{
         "Not automated": "fbbc04",
         "Automated": "34a853",

@@ -7,9 +7,13 @@ export default class NameReader {
     async getHeadingLine(columns) {
         let columnNames = [];
         for (const column of columns) {
-            let fields = await this.fieldReader.getFields();
-            let field = await fields.find(x => x.system_name === column);
-            let columnName = field ? field.label : column[0].toUpperCase() + column.substring(1);
+            let columnName
+            if (column == 'statistics_status') columnName = Config.statistics.column;
+            else {
+                let fields = await this.fieldReader.getFields();
+                let field = await fields.find(x => x.system_name === column);
+                columnName = field ? field.label : column[0].toUpperCase() + column.substring(1);
+            }
             let cell = { v: columnName, s: Config.xlsx.heading_style };
             columnNames.push(cell);
         }
@@ -28,7 +32,7 @@ export default class NameReader {
     async getCellWithStyle(column, value) {
         let cell = { v: value };
         if (column == 'id') cell.l = { Target: `https://${Config.testrail.baseURL}/index.php?/cases/view/${value}` };
-        if(Config.xlsx[column]) cell.s = { fill: { fgColor: { rgb: Config.xlsx[column][cell.v] } } }
+        if (Config.xlsx[column]) cell.s = { fill: { fgColor: { rgb: Config.xlsx[column][cell.v] } } }
         return cell;
     }
 }

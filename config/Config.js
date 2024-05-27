@@ -16,4 +16,7 @@ export default class Config {
     static get xlsx() {
         return JSON.parse(FileReader.readFile('./config/xlsx.json'));
     }
+    static get statistics() {
+        return JSON.parse(FileReader.readFile('./config/statistics.json'));
+    }
 }
