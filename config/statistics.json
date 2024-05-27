@@ -1,7 +1,10 @@
 {
-    "column": "Report status",
+    "enabled": true,
+    "tabName": "Stats",
+    "column": "statistics_status",
+    "columnName": "Report status",
     "skipped_status": "Skipped",
-    "rules":{
+    "rules": {
         "Automated": [
             {
                 "custom_automation_status": "Automated",
