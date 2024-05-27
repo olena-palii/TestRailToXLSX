@@ -2,6 +2,7 @@ import Config from '../config/Config.js';
 import TestCaseReader from '../testrail/TestCaseReader.js';
 import CellGenerator from './CellGenerator.js';
 import StatisticsGenerator from './StatisticsGenerator.js';
+import GroupStatisticsGenerator from './GroupStatisticsGenerator.js';
 import Report from './Report.js';
 import ReportWriterXLSX from './ReportWriterXLSX.js';
 export default class ReportGenerator {
@@ -9,6 +10,7 @@ export default class ReportGenerator {
         this.testCaseReader = new TestCaseReader();
         this.cellGenerator = new CellGenerator();
         this.statisticsGenerator = new StatisticsGenerator();
+        this.groupStatisticsGenerator = new GroupStatisticsGenerator();
     }
     async generate(name) {
         this.report = new Report(name);
@@ -20,7 +22,7 @@ export default class ReportGenerator {
         if (Config.statistics.enabled) {
             this.report.addTab(Config.statistics.tabName);
             this.report.addResult(this.statisticsGenerator.statistics);
-            for (const groupStatistics of this.statisticsGenerator.groupStatistics) {
+            for (const groupStatistics of this.groupStatisticsGenerator.statistics) {
                 this.report.addTab(groupStatistics.name);
                 this.report.addResult(groupStatistics.statistics);
             }
@@ -48,7 +50,7 @@ export default class ReportGenerator {
             let line = await this.generateLine(testCase, columns);
             result.push(line);
         }
-        if (Config.statistics.enabled) await this.statisticsGenerator.addGroupStatistics(testCases, groups, tabConfig);
+        if (Config.statistics.enabled) await this.groupStatisticsGenerator.addGroupStatistics(testCases, groups, tabConfig);
         return result;
     }
     async generateLine(testCase, columns) {
