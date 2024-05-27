@@ -1,25 +1,39 @@
 import Config from '../config/Config.js';
+import CellGenerator from './CellGenerator.js';
 export default class StatisticsGenerator {
     constructor() {
+        this.cellGenerator = new CellGenerator();
+        this.addStatusesToStatistics();
     }
-    async addStatisticsStatusToTestCases(testCases) {
+    statuses() {
         let config = Config.statistics.rules;
         let statuses = Object.keys(config);
-        for (let i = 0; i < testCases.length; i++) {
-            for(const status of statuses){
-                let rules = config[status];
-                for(const rule of rules){
-                    let fields = Object.keys(rule);
-                    let isValid = true;
-                    for(const field of fields){
-                        if(testCases[i][field] != rule[field]) isValid = false;
-                    }
-                    if(isValid) testCases[i].statistics_status = status;
-                }
-            }
-            if(!testCases[i].statistics_status)
-                testCases[i].statistics_status = Config.statistics.skipped_status
+        return statuses;
+    }
+    async addStatusesToStatistics() {
+        this.statistics = [[null]];
+        for (const status of this.statuses()) {
+            let cell = await this.cellGenerator.getCellWithStyle(Config.statistics.column, status);
+            this.statistics.push([cell]);
         }
-        return testCases;
+    }
+    async addColumnForTab(tabName) {
+        if (!this.statistics) await this.addStatusesToStatistics();
+        let cell = this.cellGenerator.getCell(tabName);
+        this.statistics[0].push(cell);
+        for (let i = 0; i < this.statuses().length; i++) {
+            cell = this.cellGenerator.getCell(0);
+            this.statistics[i + 1].push(cell);
+        }
+        return this.statistics[0].length - 1;
+    }
+    async addTabStatistics(testCases, tabName) {
+        let column = await this.addColumnForTab(tabName);
+        for (const testCase of testCases)
+            for (let i = 0; i < this.statuses().length; i++) {
+                if (testCase[Config.statistics.column] == this.statuses()[i])
+                    this.statistics[i + 1][column].v += 1;
+            }
+        return this.statistics;
     }
 }

@@ -8,7 +8,7 @@ export default class NameReader {
         let columnNames = [];
         for (const column of columns) {
             let columnName
-            if (column == 'statistics_status') columnName = Config.statistics.column;
+            if (column == Config.statistics.column) columnName = Config.statistics.columnName;
             else {
                 let fields = await this.fieldReader.getFields();
                 let field = await fields.find(x => x.system_name === column);
@@ -28,6 +28,9 @@ export default class NameReader {
         let cell = { v: sectionName, s: Config.xlsx.section_style };
         let sectionLine = [null, cell];
         return sectionLine;
+    }
+    getCell(value) {
+        return { v: value };
     }
     async getCellWithStyle(column, value) {
         let cell = { v: value };

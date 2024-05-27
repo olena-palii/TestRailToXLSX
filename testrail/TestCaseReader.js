@@ -1,9 +1,11 @@
 import TestRailAPI from './TestRailAPI.js';
 import FieldReader from './FieldReader.js';
+import TestCaseStatus from './TestCaseStatus.js';
 export default class TestCaseReader {
     constructor() {
         this.testRailAPI = new TestRailAPI();
         this.fieldReader = new FieldReader();
+        this.testCaseStatus = new TestCaseStatus();
     }
     async read(config) {
         let testCases = await this.testRailAPI.getTestCases(config.project_id, config.suite_id, config.filters);
@@ -11,6 +13,7 @@ export default class TestCaseReader {
         let fields = await this.fieldReader.getFields();
         testCases = this.addSectionsInfoToTestCases(testCases, sections);
         testCases = await this.setValuesToLabelsInTestCases(testCases, fields);
+        testCases = this.testCaseStatus.addStatusToTestCases(testCases);
         testCases = this.groupTestCases(testCases, config.group_by);
         console.log(`${testCases.length} test-cases found for ${config.name} tab`);
         return testCases;
