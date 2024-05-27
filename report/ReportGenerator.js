@@ -54,5 +54,6 @@ export default class ReportGenerator {
         let reportWriterXLSX = new ReportWriterXLSX(this.report.name);
         for (const tab of this.report.tabs)
             reportWriterXLSX.addTabToFile(tab.content, tab.name);
+        reportWriterXLSX.save();
     }
 }

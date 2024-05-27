@@ -6,15 +6,22 @@ import FileReader from '../file/FileReader.js';
 export default class ReportWriterXLSX {
     constructor(fileName) {
         this.file = `output/${fileName}_${DateNow.yyyy}_${DateNow.mm}_${DateNow.dd}_${DateNow.hh}_${DateNow.mi}.xlsx`;
+        this.openWorkbook();
+
+    }
+    openWorkbook() {
+        if (FileReader.fileExists(this.file)) this.workbook = XLSX.readFile(this.file);
+        else this.workbook = XLSX.utils.book_new();
+    }
+    save() {
+        XLSX.writeFile(this.workbook, this.file);
+        console.log('Report saved: ' + this.file);
     }
     addTabToFile(result, tabName) {
-        var workbook;
-        if (FileReader.fileExists(this.file)) workbook = XLSX.readFile(this.file);
-        else workbook = XLSX.utils.book_new();
-        var worksheet = XLSX.utils.aoa_to_sheet([]);
+        let worksheet = XLSX.utils.aoa_to_sheet([]);
         result.forEach((row, rowIndex) => {
             row.forEach((cellData, columnIndex) => {
-                if(cellData) this.setCell(worksheet, cellData, rowIndex, columnIndex);
+                if (cellData) this.setCell(worksheet, cellData, rowIndex, columnIndex);
             });
         });
         worksheet['!ref'] = XLSX.utils.encode_range({
@@ -22,9 +29,8 @@ export default class ReportWriterXLSX {
             e: { r: result.length - 1, c: result[0].length - 1 }
         });
         worksheet = this.adjustColumnWidth(worksheet);
-        if (workbook.SheetNames.includes(tabName)) workbook.Sheets[tabName] = worksheet;
-        else XLSX.utils.book_append_sheet(workbook, worksheet, tabName);
-        XLSX.writeFile(workbook, this.file);
+        if (this.workbook.SheetNames.includes(tabName)) this.workbook.Sheets[tabName] = worksheet;
+        else XLSX.utils.book_append_sheet(this.workbook, worksheet, tabName);
     }
     setCell(worksheet, cellData, row, column) {
         const cellAddress = XLSX.utils.encode_cell({ r: row, c: column });
