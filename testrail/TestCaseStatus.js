@@ -2,16 +2,16 @@ import Config from '../config/Config.js';
 export default class TestCaseStatus {
     constructor() {
     }
-    addStatusToTestCases(testCases) {
+    addStatusToTestCases(testCases, tabConfig) {
         for (let i = 0; i < testCases.length; i++) {
-            let s = this.getStatusOfTestCase(testCases[i]);
+            let s = this.getStatusOfTestCase(testCases[i], tabConfig);
             s ? testCases[i].statistics_status = s: testCases[i].statistics_status = Config.statistics.skipped_status;
         }
         return testCases;
     }
-    getStatusOfTestCase(testCase) {
+    getStatusOfTestCase(testCase, tabConfig) {
         let result;
-        let config = Config.statistics.rules;
+        let config = Config.statistics[tabConfig.statistics].rules;
         let statuses = Object.keys(config);
         for (const status of statuses) {
             let rules = config[status];

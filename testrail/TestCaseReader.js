@@ -7,15 +7,15 @@ export default class TestCaseReader {
         this.fieldReader = new FieldReader();
         this.testCaseStatus = new TestCaseStatus();
     }
-    async read(config) {
-        let testCases = await this.testRailAPI.getTestCases(config.project_id, config.suite_id, config.filters);
-        let sections = await this.testRailAPI.getSections(config.project_id, config.suite_id);
+    async read(tabConfig) {
+        let testCases = await this.testRailAPI.getTestCases(tabConfig.project_id, tabConfig.suite_id, tabConfig.filters);
+        let sections = await this.testRailAPI.getSections(tabConfig.project_id, tabConfig.suite_id);
         let fields = await this.fieldReader.getFields();
         testCases = this.addSectionsInfoToTestCases(testCases, sections);
         testCases = await this.setValuesToLabelsInTestCases(testCases, fields);
-        testCases = this.testCaseStatus.addStatusToTestCases(testCases);
-        testCases = this.groupTestCases(testCases, config.group_by);
-        console.log(`${testCases.length} test-cases found for ${config.name} tab`);
+        testCases = this.testCaseStatus.addStatusToTestCases(testCases, tabConfig);
+        testCases = this.groupTestCases(testCases, tabConfig.group_by);
+        console.log(`${testCases.length} test-cases found for ${tabConfig.name} tab`);
         return testCases;
     }
     groupTestCases(testCases, group_by) {
