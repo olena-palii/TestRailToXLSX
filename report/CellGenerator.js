@@ -32,6 +32,9 @@ export default class NameReader {
     getCell(value) {
         return { v: value };
     }
+    getCellNumber(value) {
+        return { t: "n", v: value };
+    }
     async getCellWithStyle(column, value) {
         let cell = { v: value };
         if (column == 'id') cell.l = { Target: `https://${Config.testrail.baseURL}/index.php?/cases/view/${value}` };

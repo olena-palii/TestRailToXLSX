@@ -22,7 +22,7 @@ export default class StatisticsGenerator {
         let cell = this.cellGenerator.getCell(tabName);
         this.statistics[0].push(cell);
         for (let i = 0; i < this.statuses().length; i++) {
-            cell = this.cellGenerator.getCell(0);
+            cell = this.cellGenerator.getCellNumber(0);
             this.statistics[i + 1].push(cell);
         }
         return this.statistics[0].length - 1;
