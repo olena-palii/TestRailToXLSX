@@ -18,21 +18,27 @@
             "bold": true
         }
     },
-    "statistics_status":{
+    "priority_id": {
+        "Low": "cccccc",
+        "Medium": "fbbc04",
+        "High": "ea4335",
+        "Critical": "990000"
+    },
+    "statistics_status": {
         "Automated": "34a853",
         "Need update": "fbbc04",
         "Need delete": "666666",
         "Can be automated": "b7b7b7",
         "Not ready for automation": "efefef"
     },
-    "custom_automation_status":{
+    "custom_automation_status": {
         "Not automated": "fbbc04",
         "Automated": "34a853",
         "Need update": "4285f4",
         "Manual only": "cccccc",
         "Not supported": "cccccc"
     },
-    "custom_status":{
+    "custom_status": {
         "Draft": "fbbc04",
         "Actual": "34a853",
         "Need update": "4285f4",
