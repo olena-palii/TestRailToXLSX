@@ -1,5 +1,15 @@
 {
     "baseURL": "domain.testrail.io",
     "login": "login@email.com",
-    "apiKey":"apiKey"
+    "apiKey": "apiKey",
+    "priority": {
+        "system_name": "priority_id",
+        "label": "Priority",
+        "options": {
+            "1": "Low",
+            "2": "Medium",
+            "3": "High",
+            "4": "Critical"
+        }
+    }
 }
