@@ -38,6 +38,7 @@ Tab will be generated in XLSX report for every config.
 * group_by - test-cases will be grouped by this field, set "group_by": false to skip it
 * show_groups - displaing or hiding group names in the report
 * sections_max_depth - displaying section name if its depth is less
+* statistics - statistics from statistics.json which rules will be used for calculations
 
 ### xlsx.json
 
