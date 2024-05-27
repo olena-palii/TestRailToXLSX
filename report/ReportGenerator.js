@@ -39,7 +39,7 @@ export default class ReportGenerator {
     async generateLine(testCase, columns) {
         let line = [];
         for (const column of columns) {
-            let cell = await this.cellGenerator.getCellWithLabel(column, testCase[column]);
+            let cell = await this.cellGenerator.getCellWithStyle(column, testCase[column]);
             line.push(cell);
         }
         return line;
