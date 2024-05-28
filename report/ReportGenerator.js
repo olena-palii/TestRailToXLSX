@@ -40,7 +40,7 @@ export default class ReportGenerator {
     async generateResult(tabConfig) {
         let result = [];
         let testCases = await this.testCaseReader.read(tabConfig);
-        let columns = Config.statistics.enabled ? [...tabConfig.columns, Config.statistics.column] : tabConfig.columns;
+        let columns = tabConfig.columns;
         let heading = await this.cellGenerator.getHeadingLine(columns);
         let content = await this.generateContent(testCases, columns, tabConfig);
         result = [heading, ...content];

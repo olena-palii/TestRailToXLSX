@@ -26,8 +26,12 @@ export default class TestCaseReader {
         let field = await fields.find(x => x.system_name === group_by);
         if (field.options) this.groups = Object.values(field.options);
         else for (const testCase of testCases)
-            if (testCase[group_by] && testCase[group_by] != "" && !this.groups.includes(testCase[group_by]))
-                this.groups.push(testCase[group_by]);
+            if (testCase[group_by] && testCase[group_by] != "" && !this.groups.includes(testCase[group_by])) {
+                let groupSplit = testCase[group_by].split("#");
+                let groupName = groupSplit[0].trim();
+                //if (groupSplit.length > 1) let groupTags = groupSplit.slice(1);
+                this.groups.push(groupName);
+            }
     }
     groupTestCases(testCases, group_by) {
         if (group_by)
