@@ -35,7 +35,7 @@ export default class FieldReader {
         for (const item of items) {
             let itemSplit = item.split(",");
             let itemKey = itemSplit[0];
-            let itemValue = itemSplit[1];
+            let itemValue = itemSplit[1].trim();
             fieldOptions[itemKey] = itemValue;
         }
         return fieldOptions;
