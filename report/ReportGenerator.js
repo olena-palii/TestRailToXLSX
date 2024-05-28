@@ -15,7 +15,7 @@ export default class ReportGenerator {
     async generate(name) {
         this.report = new Report(name);
         await this.generateTestCasesTabs();
-        if (Config.statistics.enabled) await this.generateStatisticsTabs();
+        await this.generateStatisticsTabs();
     }
     async generateTestCasesTabs() {
         let tabConfigs = Config.report;
@@ -26,11 +26,15 @@ export default class ReportGenerator {
         }
     }
     async generateStatisticsTabs() {
-        this.report.addTab(Config.statistics.tabName);
-        this.report.addResult(this.statisticsGenerator.statistics);
-        for (const groupStatistics of this.groupStatisticsGenerator.statistics) {
-            this.report.addTab(groupStatistics.name);
-            this.report.addResult(groupStatistics.statistics);
+        if (Config.statistics.summary_enabled) {
+            this.report.addTab(Config.statistics.tabName);
+            this.report.addResult(this.statisticsGenerator.statistics);
+        }
+        if (Config.statistics.group_enabled) {
+            for (const groupStatistics of this.groupStatisticsGenerator.statistics) {
+                this.report.addTab(groupStatistics.name);
+                this.report.addResult(groupStatistics.statistics);
+            }
         }
     }
     async generateResult(tabConfig) {
@@ -48,7 +52,7 @@ export default class ReportGenerator {
         this.groups = [];
         this.groupCurrent = null;
         this.sectionCurrent = null;
-        for (const testCase of testCases) {  
+        for (const testCase of testCases) {
             let groupLine = this.generateGroupLine(testCase, tabConfig);
             if (groupLine) result.push(groupLine);
             let sectionLine = this.generateSectionLine(testCase, tabConfig);
@@ -84,11 +88,10 @@ export default class ReportGenerator {
         return line;
     }
     async generateStatistics(testCases, tabConfig) {
-        
-        if (Config.statistics.enabled) {
+        if (Config.statistics.summary_enabled)
             await this.statisticsGenerator.addTabStatistics(testCases, tabConfig);
+        if (Config.statistics.group_enabled)
             await this.groupStatisticsGenerator.addGroupStatistics(testCases, this.groups, tabConfig);
-        }
     }
     saveToXLSX() {
         let reportWriterXLSX = new ReportWriterXLSX(this.report.name);

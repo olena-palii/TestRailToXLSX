@@ -1,5 +1,6 @@
 {
-    "enabled": true,
+    "summary_enabled": true,
+    "group_enabled": true,
     "tabName": "Stats",
     "column": "statistics_status",
     "columnName": "Report status",

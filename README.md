@@ -65,11 +65,10 @@ There is ability to add custom colors for the columns with options. For example,
     }
 ```
 
-
-
 ### statistics.json
 
-- enabled - enable or disable statistics calculation
+- summary_enabled - enable or disable summary statistics for all tabs
+- group_enabled - enable or disable detailed statistics by group for every tabs
 - tabName - name of the tab with statistics
 - column - test case property that will be created for statistics
 - columnName - name of additional column in every tab
