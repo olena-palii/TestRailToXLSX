@@ -6,6 +6,7 @@ export default class TestCaseReader {
         this.testRailAPI = new TestRailAPI();
         this.fieldReader = new FieldReader();
         this.testCaseStatus = new TestCaseStatus();
+        this.groups = [];
     }
     async read(tabConfig) {
         let testCases = await this.testRailAPI.getTestCases(tabConfig.project_id, tabConfig.suite_id, tabConfig.filters);
@@ -16,8 +17,17 @@ export default class TestCaseReader {
         testCases = this.testCaseStatus.addStatusToTestCases(testCases, tabConfig);
         if (tabConfig.group_by) testCases = this.groupTestCases(testCases, tabConfig.group_by);
         if (!tabConfig.show_without_group) testCases = this.removeWithEmptyGroup(testCases, tabConfig.group_by);
+        if (tabConfig.group_by) await this.getGroups(testCases, fields, tabConfig.group_by);
         console.log(`${testCases.length} test-cases found for ${tabConfig.name} tab`);
         return testCases;
+    }
+    async getGroups(testCases, fields, group_by) {
+        this.groups = [];
+        let field = await fields.find(x => x.system_name === group_by);
+        if (field.options) this.groups = Object.values(field.options);
+        else for (const testCase of testCases)
+            if (testCase[group_by] && testCase[group_by] != "" && !this.groups.includes(testCase[group_by]))
+                this.groups.push(testCase[group_by]);
     }
     groupTestCases(testCases, group_by) {
         if (group_by)
