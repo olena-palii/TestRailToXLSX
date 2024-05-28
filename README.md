@@ -90,12 +90,6 @@ Example of "default" statistics rules: statistics is calculated for "Automated",
                     "custom_status": "Actual"
                 }
             ],
-            "Need update": [
-                {
-                    "custom_automation_status": "Need update",
-                    "custom_status": "Actual"
-                }
-            ],
             "Can be automated": [
                 {
                     "custom_automation_status": "Not automated",
