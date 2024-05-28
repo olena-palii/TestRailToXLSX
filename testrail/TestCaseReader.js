@@ -15,9 +15,9 @@ export default class TestCaseReader {
         testCases = this.addSectionsInfoToTestCases(testCases, sections);
         testCases = await this.setValuesToLabelsInTestCases(testCases, fields);
         testCases = this.testCaseStatus.addStatusToTestCases(testCases, tabConfig);
+        if (tabConfig.group_by) testCases = await this.getGroups(testCases, fields, tabConfig.group_by);
         if (tabConfig.group_by) testCases = this.groupTestCases(testCases, tabConfig.group_by);
         if (!tabConfig.show_without_group) testCases = this.removeWithEmptyGroup(testCases, tabConfig.group_by);
-        if (tabConfig.group_by) await this.getGroups(testCases, fields, tabConfig.group_by);
         console.log(`${testCases.length} test-cases found for ${tabConfig.name} tab`);
         return testCases;
     }
@@ -25,13 +25,20 @@ export default class TestCaseReader {
         this.groups = [];
         let field = await fields.find(x => x.system_name === group_by);
         if (field.options) this.groups = Object.values(field.options);
-        else for (const testCase of testCases)
-            if (testCase[group_by] && testCase[group_by] != "" && !this.groups.includes(testCase[group_by])) {
+        else for (const testCase of testCases) {
+            if (testCase[group_by] && testCase[group_by] != "") {
                 let groupSplit = testCase[group_by].split("#");
                 let groupName = groupSplit[0].trim();
-                //if (groupSplit.length > 1) let groupTags = groupSplit.slice(1);
-                this.groups.push(groupName);
+                let groupTags;
+                if (groupSplit.length > 1) groupTags = groupSplit.slice(1);
+                testCase[group_by] = groupName;
+                testCase.tags = groupTags;
+                if (!this.groups.includes(groupName))
+                    this.groups.push(groupName);
             }
+        }
+        this.groups.sort((a, b) => a.localeCompare(b));
+        return testCases;
     }
     groupTestCases(testCases, group_by) {
         if (group_by)
