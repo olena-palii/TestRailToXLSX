@@ -36,6 +36,7 @@ Tab will be generated in XLSX report for every config.
 * project_id - id of testrail project
 * suite_id - id of testrail suite
 * filters - every filter must start with "&" and define filtration value, e.g. "&is_deleted=0", you can apply many filters for the same field, e.g. "&priority_id=3,4" will include only test-cases with 3 and 4 priorities
+* tags - filter by tags from group_by property, test case is counted if any tag matches
 * group_by - test cases are grouped by this field, remove it to skip grouping, it also affects group statistics, #tags are ignored, e.g. "Category #tags" is counted as "Category"
 * show_groups - displaying or hiding group names in the report
 * show_without_group - displaying or hiding test cases without set group field

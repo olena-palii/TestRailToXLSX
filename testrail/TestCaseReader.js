@@ -15,13 +15,14 @@ export default class TestCaseReader {
         testCases = this.addSectionsInfoToTestCases(testCases, sections);
         testCases = await this.setValuesToLabelsInTestCases(testCases, fields);
         testCases = this.testCaseStatus.addStatusToTestCases(testCases, tabConfig);
-        if (tabConfig.group_by) testCases = await this.getGroups(testCases, fields, tabConfig.group_by);
+        if (tabConfig.group_by) testCases = await this.getGroupsWithTags(testCases, fields, tabConfig.group_by);
         if (tabConfig.group_by) testCases = this.groupTestCases(testCases, tabConfig.group_by);
         if (!tabConfig.show_without_group) testCases = this.removeWithEmptyGroup(testCases, tabConfig.group_by);
+        testCases = await this.filterByTags(testCases, tabConfig.tags);
         console.log(`${testCases.length} test-cases found for ${tabConfig.name} tab`);
         return testCases;
     }
-    async getGroups(testCases, fields, group_by) {
+    async getGroupsWithTags(testCases, fields, group_by) {
         this.groups = [];
         let field = await fields.find(x => x.system_name === group_by);
         if (field.options) this.groups = Object.values(field.options);
@@ -39,6 +40,18 @@ export default class TestCaseReader {
         }
         this.groups.sort((a, b) => a.localeCompare(b));
         return testCases;
+    }
+    async filterByTags(testCases, tags) {
+        if (!tags) return testCases;
+        let testCasesCleared = [];
+        for (const testCase of testCases)
+            if (testCase.tags) {
+                let match = false;
+                for (const tag of testCase.tags)
+                    if (tags.includes(tag)) match = true;
+                if (match) testCasesCleared.push(testCase);
+            }
+        return testCasesCleared;
     }
     groupTestCases(testCases, group_by) {
         if (group_by)
