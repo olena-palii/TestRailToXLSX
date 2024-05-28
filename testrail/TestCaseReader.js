@@ -14,7 +14,7 @@ export default class TestCaseReader {
         testCases = this.addSectionsInfoToTestCases(testCases, sections);
         testCases = await this.setValuesToLabelsInTestCases(testCases, fields);
         testCases = this.testCaseStatus.addStatusToTestCases(testCases, tabConfig);
-        testCases = this.groupTestCases(testCases, tabConfig.group_by);
+        if(tabConfig.group_by) testCases = this.groupTestCases(testCases, tabConfig.group_by);
         console.log(`${testCases.length} test-cases found for ${tabConfig.name} tab`);
         return testCases;
     }

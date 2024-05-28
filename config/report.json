@@ -1,11 +1,11 @@
 [
     {
         "name": "Tab Name",
-        "columns": ["custom_category", "id", "title", "custom_automation_status", "custom_status"],
+        "columns": ["id", "title", "priority_id", "custom_automation_status", "custom_status"],
         "project_id": 2,
         "suite_id": 9,
         "filters": "&is_deleted=0&priority_id=3,4",
-        "group_by": "custom_category",
+        "group_by": "priority_id",
         "show_groups": true,
         "statistics": "default"
     }

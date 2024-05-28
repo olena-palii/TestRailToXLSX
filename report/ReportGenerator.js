@@ -64,10 +64,10 @@ export default class ReportGenerator {
     }
     generateGroupLine(testCase, tabConfig) {
         let groupLine;
-        if (tabConfig.show_groups && testCase[tabConfig.group_by] != this.groupCurrent) {
+        if (tabConfig.group_by && testCase[tabConfig.group_by] != this.groupCurrent) {
             this.groupCurrent = testCase[tabConfig.group_by];
             this.groups.push(this.groupCurrent);
-            groupLine = this.cellGenerator.getGroupLine(this.groupCurrent);
+            if (tabConfig.show_groups) groupLine = this.cellGenerator.getGroupLine(this.groupCurrent);
         }
         return groupLine;
     }
@@ -90,7 +90,7 @@ export default class ReportGenerator {
     async generateStatistics(testCases, tabConfig) {
         if (Config.statistics.summary_enabled)
             await this.statisticsGenerator.addTabStatistics(testCases, tabConfig);
-        if (Config.statistics.group_enabled)
+        if (tabConfig.group_by && Config.statistics.group_enabled)
             await this.groupStatisticsGenerator.addGroupStatistics(testCases, this.groups, tabConfig);
     }
     saveToXLSX() {
