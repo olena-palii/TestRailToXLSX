@@ -14,7 +14,8 @@ export default class TestCaseReader {
         testCases = this.addSectionsInfoToTestCases(testCases, sections);
         testCases = await this.setValuesToLabelsInTestCases(testCases, fields);
         testCases = this.testCaseStatus.addStatusToTestCases(testCases, tabConfig);
-        if(tabConfig.group_by) testCases = this.groupTestCases(testCases, tabConfig.group_by);
+        if (tabConfig.group_by) testCases = this.groupTestCases(testCases, tabConfig.group_by);
+        if (!tabConfig.show_without_group) testCases = this.removeWithEmptyGroup(testCases, tabConfig.group_by);
         console.log(`${testCases.length} test-cases found for ${tabConfig.name} tab`);
         return testCases;
     }
@@ -28,6 +29,13 @@ export default class TestCaseReader {
                 }
             );
         return testCases;
+    }
+    removeWithEmptyGroup(testCases, group_by) {
+        let testCasesCleared = [];
+        for (const testCase of testCases)
+            if (testCase[group_by] && testCase[group_by] != "")
+                testCasesCleared.push(testCase);
+        return testCasesCleared;
     }
     addSectionsInfoToTestCases(testCases, sections) {
         for (let i = 0; i < testCases.length; i++) {

@@ -7,6 +7,7 @@
         "filters": "&is_deleted=0&priority_id=3,4",
         "group_by": "priority_id",
         "show_groups": true,
+        "show_without_group": true,
         "statistics": "default"
     }
 ]

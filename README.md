@@ -37,6 +37,7 @@ Tab will be generated in XLSX report for every config.
 * filters - every filter must start with "&" and define filtration value, e.g. "&is_deleted=0", you can apply many filters for the same field, e.g. "&priority_id=3,4" will include only test-cases with 3 and 4 priorities
 * group_by - test-cases will be grouped by this field, remove it to skip, it also affects group statistics
 * show_groups - displaying or hiding group names in the report
+* show_without_group - displaying or hiding test cases with not set group field
 * sections_max_depth - displaying section name if its depth is less
 * statistics - statistics from statistics.json which rules will be used for calculations
 
