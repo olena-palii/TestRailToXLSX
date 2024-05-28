@@ -32,6 +32,7 @@ export default class TestCaseReader {
                 let groupName = groupSplit[0].trim();
                 let groupTags;
                 if (groupSplit.length > 1) groupTags = groupSplit.slice(1);
+                if(groupTags) groupTags = groupTags.map(tag => tag.trim());
                 testCase[group_by] = groupName;
                 testCase.tags = groupTags;
                 if (!this.groups.includes(groupName))
