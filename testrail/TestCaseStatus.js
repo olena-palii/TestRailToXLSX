@@ -5,7 +5,8 @@ export default class TestCaseStatus {
     addStatusToTestCases(testCases, tabConfig) {
         if (Config.statistics.summary_enabled || Config.statistics.group_enabled)
             for (let i = 0; i < testCases.length; i++) {
-                let s = this.getStatusOfTestCase(testCases[i], tabConfig);
+                let s;
+                if(tabConfig.statistics) s = this.getStatusOfTestCase(testCases[i], tabConfig);
                 s ? testCases[i].statistics_status = s : testCases[i].statistics_status = Config.statistics.skipped_status;
             }
         return testCases;

@@ -20,9 +20,14 @@ export default class ReportGenerator {
     async generateTestCasesTabs() {
         let tabConfigs = Config.report;
         for (const tabConfig of tabConfigs) {
-            console.log(`Start generating ${tabConfig.name} tab...`)
-            this.report.addTab(tabConfig.name);
-            this.report.addResult(await this.generateResult(tabConfig));
+            if (tabConfig.enabled) {
+                console.log(`Start generating ${tabConfig.name} tab...`);
+                let result = await this.generateResult(tabConfig);
+                if (tabConfig.tab_displayed) {
+                    this.report.addTab(tabConfig.name);
+                    this.report.addResult(result);
+                }
+            } else console.log(`Skip ${tabConfig.name} tab`);
         }
     }
     async generateStatisticsTabs() {
@@ -44,7 +49,7 @@ export default class ReportGenerator {
         let heading = await this.cellGenerator.getHeadingLine(columns);
         let content = await this.generateContent(testCases, columns, tabConfig);
         result = [heading, ...content];
-        await this.generateStatistics(testCases, tabConfig);
+        if(tabConfig.statistics) await this.generateStatistics(testCases, tabConfig);
         return result;
     }
     async generateContent(testCases, columns, tabConfig) {
